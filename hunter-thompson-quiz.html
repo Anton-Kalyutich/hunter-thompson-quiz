@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hunter Thompson Quiz</title>
+</head>
+
+<body>
+    <h1>Do You Know Hunter Stockton Thompson?</h1>
+    <h2>I guess we'll find out soon enough...</h2>
+    <p>Here's a quick quiz about Hunter Thomspon's life and work. </p>
+
+   <button type="button" id="play">Play</button>
+   
+   <script>
+        document.getElementById("play").addEventListener("click", showQuestion);
+    
+        let countRight = 0;
+        const gameObject = {};
+        
+        gameObject.questions = [
+            "Where Was Hunter Thompson Born?",
+            "In What Branch of Military Did Hunter Thompson Serve?",
+            "With The Publication of What Book Did Hunter Thompson Rise to Prominence?",
+            "What Was The Genre Hunter Thompson Was Writing In?",
+            "What Public Office Hunter Thompson Was Once Running For?",
+            "What Famous Actor Was Among Hunter Thompson's Best Friends?",
+            "About What American President Was Hunter Thompson Writing The Most?",
+            "How Many Children Did Hunter Thompson Have?",
+            "On Occasion of What Sports Event Did Hunter Thompson End His Life?",
+            "What Did Hunter Thompson Bequeath to Do With His Remains?"
+        ];
+
+        gameObject.options = [
+            ["Boulder, Colorado", "San Francisco, California", "Louisville, Kentucky", "Las Vegas, Nevada"],
+            ["Army", "Marine Corps", "Air Force", "Coast Guard"],
+            ["Fear and Loathing in Las Vegas", "Hell's Angels", "The Rum Diary", "Better Than Sex"],
+            ["Fantasy","New Jounalism", "Social Realism", "Gonzo"],
+            ["County Sheriff", "State Assemblyman", "City Comptroller", "White House Chief of Staff"],
+            ["Brad Pitt", "Colin Farell", "Samuel L. Jackson", "Johnny Depp"],
+            ["George W. Bush", "Richard Nixon", "Abraham Lincoln", "Joe Biden"],
+            ["One", "Two", "Three", "Four"],
+            ["Champions League Final", "NBA Playoffs", "MLB World Series", "Superbowl"],
+            ["Freeze to Revive Later", "Shoot From Cannon", "Burial at Sea", "Bury on Everest"]
+        ];
+
+        gameObject.rightAnswers = [
+            "Louisville, Kentucky",
+            "Air Force",
+            "Hell's Angels",
+            "Gonzo",
+            "County Sheriff",
+            "Johnny Depp",
+            "Richard Nixon",
+            "One",
+            "Superbowl",
+            "Shoot From Cannon"
+        ];
+       
+        function showQuestion() {
+            if (document.getElementById("play")) {
+                document.getElementById("play").remove();
+            }
+            
+            if (gameObject.questions.length === 0) {
+                gameOver();
+                return;
+            }
+            
+            let question = document.createElement("h3");
+            question.innerHTML = gameObject.questions.shift();
+            document.body.appendChild(question);
+
+            let ul = document.createElement("ul");
+            document.body.appendChild(ul);
+
+            let options = gameObject.options.shift();
+            for (let option of options) {
+                let li = document.createElement("li");
+                li.innerHTML = option;
+                li.addEventListener("click", checkGuess);
+                li.addEventListener("mouseover", colorToOrange);
+                li.addEventListener("mouseout", colorToBlack);
+                ul.appendChild(li);
+            }
+        }
+
+        function colorToOrange() {
+            event.currentTarget.style.color = "orange";
+        }
+
+        function colorToBlack() {
+            event.currentTarget.style.color = "black";
+        }
+
+        function checkGuess() {
+            
+            let h4 = document.createElement("h4");
+            document.body.appendChild(h4);
+
+            let element = event.currentTarget;
+            let text = element.innerHTML;
+            
+            if (text === gameObject.rightAnswers.shift()) {
+                countRight++;
+                element.style.color = "lightgreen";
+                h4.innerHTML = "Correct!";
+                h4.style.color = "lightgreen";
+            } else {
+                element.style.color = "red";
+                h4.innerHTML = "Wrong!";
+                h4.style.color = "red";
+            }
+
+            for (let li of document.querySelector("ul").children) {
+                li.removeEventListener("click", checkGuess);
+                li.removeEventListener("mouseover", colorToOrange);
+                li.removeEventListener("mouseout", colorToBlack);
+            }
+
+            let nextBtn = document.createElement("button");
+            nextBtn.innerHTML = "Next Question";
+            document.body.appendChild(nextBtn);
+            nextBtn.addEventListener("click", nextQuestion);
+        }
+
+        function nextQuestion() {
+            document.querySelector("button").remove();
+            while (document.querySelector("ul").firstChild) {
+                document.querySelector("ul").removeChild(document.querySelector("ul").firstChild);
+            }
+            
+            document.querySelector("ul").remove();
+            document.querySelector("h3").remove();
+            document.querySelector("h4").remove();
+
+            showQuestion();
+        }
+
+        function gameOver() {
+            let message = document.createElement("h3");
+            message.innerHTML = `The quiz is complete! You got ${countRight} questions right.`;
+            document.body.appendChild(message);
+
+            let restartBtn = document.createElement("button");
+            restartBtn.innerHTML = "Try Again";
+            document.body.appendChild(restartBtn);
+            restartBtn.addEventListener("click", restart);
+        }
+
+        function restart() {
+            document.querySelector("h3").remove();
+            document.querySelector("button").remove();
+            countRight = 0;
+
+            gameObject.questions = [
+                "Where Was Hunter Thompson Born?",
+                "In What Branch of Military Did Hunter Thompson Serve?",
+                "With The Publication of What Book Did Hunter Thompson Rise to Prominence?",
+                "What Was The Genre Hunter Thompson Was Writing In?",
+                "What Public Office Hunter Thompson Was Once Running For?",
+                "What Famous Actor Was Among Hunter Thompson's Best Friends?",
+                "About What American President Was Hunter Thompson Writing The Most?",
+                "How Many Children Did Hunter Thompson Have?",
+                "On Occasion of What Sports Event Did Hunter Thompson End His Life?",
+                "What Did Hunter Thompson Bequeath to Do With His Remains?"
+            ];
+
+            gameObject.options = [
+                ["Boulder, Colorado", "San Francisco, California", "Louisville, Kentucky", "Las Vegas, Nevada"],
+                ["Army", "Marine Corps", "Air Force", "Coast Guard"],
+                ["Fear and Loathing in Las Vegas", "Hell's Angels", "The Rum Diary", "Better Than Sex"],
+                ["Fantasy","New Jounalism", "Social Realism", "Gonzo"],
+                ["County Sheriff", "State Assemblyman", "City Comptroller", "White House Chief of Staff"],
+                ["Brad Pitt", "Colin Farell", "Samuel L. Jackson", "Johnny Depp"],
+                ["George W. Bush", "Richard Nixon", "Abraham Lincoln", "Joe Biden"],
+                ["One", "Two", "Three", "Four"],
+                ["Champions League Final", "NBA Playoffs", "MLB World Series", "Superbowl"],
+                ["Freeze to Revive Later", "Shoot From Cannon", "Burial at Sea", "Bury on Everest"]
+            ];
+
+            gameObject.rightAnswers = [
+                "Louisville, Kentucky",
+                "Air Force",
+                "Hell's Angels",
+                "Gonzo",
+                "County Sheriff",
+                "Johnny Depp",
+                "Richard Nixon",
+                "One",
+                "Superbowl",
+                "Shoot From Cannon"
+            ];
+            
+            showQuestion();
+        }
+
+   </script>
+    
+</body>
+</html>
