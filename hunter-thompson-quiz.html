@@ -19,6 +19,7 @@
         document.getElementById("play").addEventListener("click", showQuestion);
     
         let countRight = 0;
+        let i = 1;
         const gameObject = {};
         
         gameObject.questions = [
@@ -71,7 +72,7 @@
             }
             
             let question = document.createElement("h3");
-            question.innerHTML = gameObject.questions.shift();
+            question.innerHTML = `${i}. ${gameObject.questions.shift()}`;
             document.body.appendChild(question);
 
             let ul = document.createElement("ul");
@@ -97,20 +98,26 @@
         }
 
         function checkGuess() {
-            
+
             let h4 = document.createElement("h4");
             document.body.appendChild(h4);
 
             let element = event.currentTarget;
             let text = element.innerHTML;
+            let rightAnswer = gameObject.rightAnswers.shift();
             
-            if (text === gameObject.rightAnswers.shift()) {
+            if (text === rightAnswer) {
                 countRight++;
                 element.style.color = "lightgreen";
                 h4.innerHTML = "Correct!";
                 h4.style.color = "lightgreen";
             } else {
                 element.style.color = "red";
+                for (let li of document.querySelectorAll('li')) {
+                    if (li.textContent.includes(rightAnswer)) {
+                        li.style.color = "lightgreen";
+                    }
+                }
                 h4.innerHTML = "Wrong!";
                 h4.style.color = "red";
             }
@@ -128,6 +135,8 @@
         }
 
         function nextQuestion() {
+            i++;
+            
             document.querySelector("button").remove();
             while (document.querySelector("ul").firstChild) {
                 document.querySelector("ul").removeChild(document.querySelector("ul").firstChild);
@@ -155,6 +164,7 @@
             document.querySelector("h3").remove();
             document.querySelector("button").remove();
             countRight = 0;
+            i = 1;
 
             gameObject.questions = [
                 "Where Was Hunter Thompson Born?",
